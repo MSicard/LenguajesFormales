@@ -2,7 +2,6 @@ const AFN = require('./AFN.js');
 
 const AFNe = (function () {
     
-
     convertToAFN = function () {
         let indexEpsilon = AFNe.properties.alphabet.length - 1;
         let table = [];

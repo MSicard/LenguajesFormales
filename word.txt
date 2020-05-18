@@ -1,0 +1,10 @@
+Welcome to my program this is an intuitive tool for learning writing and testing Regular Expressions Key features include
+
+
+
+Real time results shows results as you type 
+
+Code hinting roll over your expressions to see info on specific elements 
+
+Detailed results roll over a match to see details view group info below 
+

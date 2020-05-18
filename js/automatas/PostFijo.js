@@ -1,7 +1,14 @@
-const Stack = require('./Stack.js');
+// const Stack = require('./Stack.js');
 
 const PostFijo = ( function () {
+    const initPostFijo = function (expression) {
+        PostFijo.properties.expression = new Stack();
+        PostFijo.properties.stack = new Stack();
+        PostFijo.properties.regularExpression = expression;
+    }
+
     const convertRegularExpression = function (expression) {
+        initPostFijo(expression);
         for (let i = 0; i < expression.length; i++ ) {
             let value = expression[i];
             switch (value) {
@@ -9,13 +16,14 @@ const PostFijo = ( function () {
                     rightP();
                     break;
                 case '(':
+                    leftP(expression[i - 1]);
                     PostFijo.properties.stack.push(value);
+                    // operator(value);
                     break;
                 case ',':
                 case '+':
                 case '*':
                     // Se mete al stack
-                    console.log('value: ', value);
                     operator(value);
                     break;
                 default: // valor del alfabeto
@@ -27,7 +35,13 @@ const PostFijo = ( function () {
         while (!PostFijo.properties.stack.isEmpty()) {
             PostFijo.properties.expression.push(PostFijo.properties.stack.pop());
         }
-        console.log("Final: ", PostFijo.properties.expression);
+
+        return PostFijo.properties.expression;
+    }
+
+    const leftP = function (vbefore) {
+        if (vbefore !== undefined && vbefore !== ',')
+            operator('.') 
     }
 
     const rightP = function () {
@@ -43,16 +57,15 @@ const PostFijo = ( function () {
         switch (vbefore) {
             case '(':
             case ',':
+            case undefined:
                 return;
-            default: // Agregar la concatenación como operador. 
+            default: // Agregar la concatenación como operador si hay dos letras juntas
                 operator('.');
         }
     }
 
     const operator = function (op) {
         if (! PostFijo.properties.stack.isEmpty()) {
-            console.log(op);
-            console.log(PostFijo.properties.stack);
             let precedencia = PostFijo.properties.precedencia.indexOf(op);
             let value = PostFijo.properties.stack.peek();
             if (PostFijo.properties.precedencia.indexOf(value) >= precedencia) {
@@ -60,10 +73,8 @@ const PostFijo = ( function () {
                 operator(op);
                 return;
             }
-        } else {
-            
-        }
-        PostFijo.properties.stack.push(op);
+        }   
+        PostFijo.properties.stack.push(op);   
     }
 
     return {
@@ -74,12 +85,13 @@ const PostFijo = ( function () {
 
 
 PostFijo.properties = {
-    stack: new Stack(),
-    expression: new Stack(),
-    regularExpression: "(abc,de)&+com\n",
+    stack: null,
+    expression: null,
+    regularExpression: "(padre &*com),(www&*com)",
     precedencia: [',', '.', '+', '*']
 }
 
-PostFijo.convertRegularExpression(PostFijo.properties.regularExpression);
+
+// console.log(PostFijo.convertRegularExpression(PostFijo.properties.regularExpression));
 
 
